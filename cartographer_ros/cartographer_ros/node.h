@@ -163,6 +163,10 @@ class Node {
   void PublishTrajectoryNodeList(const ::ros::WallTimerEvent& timer_event);
   void PublishLandmarkPosesList(const ::ros::WallTimerEvent& timer_event);
   void PublishConstraintList(const ::ros::WallTimerEvent& timer_event);
+  ////////////////add
+  void PublishLaserOdom(const ::ros::WallTimerEvent& timer_event);
+  void PublishUgvOdom(const ::ros::WallTimerEvent& timer_event);
+  ////////////////////
   bool ValidateTrajectoryOptions(const TrajectoryOptions& options);
   bool ValidateTopicNames(const TrajectoryOptions& options);
   cartographer_ros_msgs::StatusResponse FinishTrajectoryUnderLock(
@@ -183,11 +187,17 @@ class Node {
   std::unique_ptr<cartographer_ros::metrics::FamilyFactory> metrics_registry_;
   MapBuilderBridge map_builder_bridge_ GUARDED_BY(mutex_);
 
+
   ::ros::NodeHandle node_handle_;
   ::ros::Publisher submap_list_publisher_;
+  /////////////////////////add
+  ::ros::Publisher laser_odom_publisher_;
+  ::ros::Publisher ugv_odom_publisher_;
+  ////////////////////////////
   ::ros::Publisher trajectory_node_list_publisher_;
   ::ros::Publisher landmark_poses_list_publisher_;
   ::ros::Publisher constraint_list_publisher_;
+
   // These ros::ServiceServers need to live for the lifetime of the node.
   std::vector<::ros::ServiceServer> service_servers_;
   ::ros::Publisher scan_matched_point_cloud_publisher_;

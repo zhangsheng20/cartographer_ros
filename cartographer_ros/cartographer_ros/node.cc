@@ -101,6 +101,15 @@ Node::Node(
     carto::metrics::RegisterAllMetrics(metrics_registry_.get());
   }
 
+
+
+/////////////////////////////////////////add
+laser_odom_publisher_=
+      node_handle_.advertise<nav_msgs::Odometry>("LaserOdomTopic", 100);
+ugv_odom_publisher_  =
+      node_handle_.advertise<nav_msgs::Odometry>("UgvOdomTopic", 100);
+/////////////////////////////////////////////////
+
   submap_list_publisher_ =
       node_handle_.advertise<::cartographer_ros_msgs::SubmapList>(
           kSubmapListTopic, kLatestOnlyPublisherQueueSize);
@@ -184,6 +193,24 @@ void Node::PublishSubmapList(const ::ros::WallTimerEvent& unused_timer_event) {
   absl::MutexLock lock(&mutex_);
   submap_list_publisher_.publish(map_builder_bridge_.GetSubmapList());
 }
+
+///////////////////////////////////////////////////////////////////////add
+void Node::PublishLaserOdom(const ::ros::WallTimerEvent& unused_timer_event) {
+  carto::common::MutexLocker lock(&mutex_);
+  nav_msgs::Odometry pub_message;
+  pub_message.header.frame_id="slam_odom";
+  pub_message.pose.pose.position.x=0.1;
+  //laser_odom_publisher_.publish(pub_message);
+}
+void Node::PublishUgvOdom(const ::ros::WallTimerEvent& unused_timer_event) {
+  carto::common::MutexLocker lock(&mutex_);
+  nav_msgs::Odometry pub_message;
+  pub_message.header.frame_id="slam_odom";
+  pub_message.pose.pose.position.x=0.1;
+  //laser_odom_publisher_.publish(pub_message);
+}
+////////////////////////////////////////////////////////////////////
+
 
 void Node::AddExtrapolator(const int trajectory_id,
                            const TrajectoryOptions& options) {
@@ -270,7 +297,27 @@ void Node::PublishLocalTrajectoryData(const ::ros::TimerEvent& timer_event) {
     const Rigid3d tracking_to_map =
         trajectory_data.local_to_map * tracking_to_local;
 
+    ////////////////////////////////add
+    nav_msgs::Odometry pub_laser_odom;
+    pub_laser_odom.pose.pose=ToGeometryMsgPose(tracking_to_map);
+    pub_laser_odom.header.frame_id="/map";
+    pub_laser_odom.child_frame_id=trajectory_state.trajectory_options.tracking_frame;
+    //pub_laser_odom.header.stamp = ros::Time::now();
+    pub_laser_odom.header.stamp=ToRos(now);
+    laser_odom_publisher_.publish(pub_laser_odom);
+    //////////////////////////////////   
+
     if (trajectory_data.published_to_tracking != nullptr) {
+
+      ////////////////////////////////add
+      nav_msgs::Odometry pub_ugv_odom;
+      pub_ugv_odom.pose.pose=ToGeometryMsgPose( tracking_to_map * (*trajectory_state.published_to_tracking));
+      pub_ugv_odom.header.frame_id="/world";
+      pub_ugv_odom.child_frame_id=trajectory_state.trajectory_options.published_frame;
+      pub_ugv_odom.header.stamp = ros::Time::now();
+      ugv_odom_publisher_.publish(pub_ugv_odom);
+      //////////////////////////////////  
+
       if (trajectory_data.trajectory_options.provide_odom_frame) {
         std::vector<geometry_msgs::TransformStamped> stamped_transforms;
 
