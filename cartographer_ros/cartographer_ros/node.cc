@@ -196,14 +196,14 @@ void Node::PublishSubmapList(const ::ros::WallTimerEvent& unused_timer_event) {
 
 ///////////////////////////////////////////////////////////////////////add
 void Node::PublishLaserOdom(const ::ros::WallTimerEvent& unused_timer_event) {
-  carto::common::MutexLocker lock(&mutex_);
+  absl::MutexLock lock(&mutex_);
   nav_msgs::Odometry pub_message;
   pub_message.header.frame_id="slam_odom";
   pub_message.pose.pose.position.x=0.1;
   //laser_odom_publisher_.publish(pub_message);
 }
 void Node::PublishUgvOdom(const ::ros::WallTimerEvent& unused_timer_event) {
-  carto::common::MutexLocker lock(&mutex_);
+  absl::MutexLock lock(&mutex_);
   nav_msgs::Odometry pub_message;
   pub_message.header.frame_id="slam_odom";
   pub_message.pose.pose.position.x=0.1;
@@ -301,7 +301,7 @@ void Node::PublishLocalTrajectoryData(const ::ros::TimerEvent& timer_event) {
     nav_msgs::Odometry pub_laser_odom;
     pub_laser_odom.pose.pose=ToGeometryMsgPose(tracking_to_map);
     pub_laser_odom.header.frame_id="/map";
-    pub_laser_odom.child_frame_id=trajectory_state.trajectory_options.tracking_frame;
+    pub_laser_odom.child_frame_id=trajectory_data.trajectory_options.tracking_frame;
     //pub_laser_odom.header.stamp = ros::Time::now();
     pub_laser_odom.header.stamp=ToRos(now);
     laser_odom_publisher_.publish(pub_laser_odom);
@@ -311,9 +311,9 @@ void Node::PublishLocalTrajectoryData(const ::ros::TimerEvent& timer_event) {
 
       ////////////////////////////////add
       nav_msgs::Odometry pub_ugv_odom;
-      pub_ugv_odom.pose.pose=ToGeometryMsgPose( tracking_to_map * (*trajectory_state.published_to_tracking));
+      pub_ugv_odom.pose.pose=ToGeometryMsgPose( tracking_to_map * (*trajectory_data.published_to_tracking));
       pub_ugv_odom.header.frame_id="/world";
-      pub_ugv_odom.child_frame_id=trajectory_state.trajectory_options.published_frame;
+      pub_ugv_odom.child_frame_id=trajectory_data.trajectory_options.published_frame;
       pub_ugv_odom.header.stamp = ros::Time::now();
       ugv_odom_publisher_.publish(pub_ugv_odom);
       //////////////////////////////////  

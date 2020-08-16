@@ -27,7 +27,8 @@
       type="cartographer_node" args="
           -configuration_directory $(find cartographer_ros)/configuration_files
           -configuration_basename my_rplidar_localization_useimu.lua
-          -load_state_filename $(arg load_state_filename)"
+          -load_state_filename $(arg load_state_filename)
+          --collect_metrics"
       output="screen">
      <remap from="imu" to="/mavros/imu/data" />
   </node>
