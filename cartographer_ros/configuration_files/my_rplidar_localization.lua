@@ -13,9 +13,11 @@
 -- limitations under the License.
 
 include "my_rplidar.lua"
-TRAJECTORY_BUILDER.pure_localization = true
+TRAJECTORY_BUILDER.pure_localization_trimmer = {
+  max_submaps_to_keep = 3,
+}
 
-TRAJECTORY_BUILDER_2D.use_imu_data = true
+TRAJECTORY_BUILDER_2D.use_imu_data = false
 TRAJECTORY_BUILDER_2D.max_range =10
 if(TRAJECTORY_BUILDER_2D.use_imu_data)
 then

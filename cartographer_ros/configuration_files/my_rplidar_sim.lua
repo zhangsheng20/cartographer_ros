@@ -47,7 +47,9 @@ options = {
 
 
 
-TRAJECTORY_BUILDER.pure_localization = true
+TRAJECTORY_BUILDER.pure_localization_trimmer = {
+  max_submaps_to_keep = 3,
+}
 MAP_BUILDER.use_trajectory_builder_2d = true
 TRAJECTORY_BUILDER_2D.use_imu_data = false
 --TRAJECTORY_BUILDER_2D.num_accumulated_range_data = 10
