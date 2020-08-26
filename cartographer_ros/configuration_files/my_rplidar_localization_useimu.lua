@@ -39,7 +39,7 @@ POSE_GRAPH.constraint_builder.ceres_scan_matcher.ceres_solver_options.num_thread
 
 POSE_GRAPH.global_sampling_ratio=0.002
 POSE_GRAPH.matcher_rotation_weight=5e-2 -- 5e2
-POSE_GRAPH.optimization_problem.rotation_weight=3e5 --3e5
+POSE_GRAPH.optimization_problem.rotation_weight=3e5 --3e1
 POSE_GRAPH.optimization_problem.acceleration_weight=1e-3   --1e3
 
 
