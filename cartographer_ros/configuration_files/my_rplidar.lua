@@ -49,18 +49,20 @@ MAP_BUILDER.use_trajectory_builder_2d = true
 TRAJECTORY_BUILDER_2D.use_imu_data = false
 --TRAJECTORY_BUILDER_2D.num_accumulated_range_data = 10
 
-TRAJECTORY_BUILDER_2D.submaps.num_range_data =20
-TRAJECTORY_BUILDER_2D.min_range = 0.25
-TRAJECTORY_BUILDER_2D.max_range =9
+TRAJECTORY_BUILDER_2D.submaps.num_range_data =20  --存的帧数太多在旋转时累计误差比较大，submap质量会变差
+TRAJECTORY_BUILDER_2D.min_range = 0.25   
+TRAJECTORY_BUILDER_2D.max_range =9 --旋转时远处的点云在产生畸变影响定位的精度，且远处反光率低的物体探测性能下降
+
 POSE_GRAPH.optimize_every_n_nodes = 10
 POSE_GRAPH.constraint_builder.min_score = 0.65
 
-TRAJECTORY_BUILDER_2D.use_online_correlative_scan_matching =true
+TRAJECTORY_BUILDER_2D.use_online_correlative_scan_matching =true   --没有imu,odom等其他信息，
 TRAJECTORY_BUILDER_2D.real_time_correlative_scan_matcher.linear_search_window = 0.25
-TRAJECTORY_BUILDER_2D.real_time_correlative_scan_matcher.translation_delta_cost_weight = 1e-1
-TRAJECTORY_BUILDER_2D.real_time_correlative_scan_matcher.rotation_delta_cost_weight = 1e-1
-TRAJECTORY_BUILDER_2D.real_time_correlative_scan_matcher.angular_search_window = math.rad(30.)
+TRAJECTORY_BUILDER_2D.real_time_correlative_scan_matcher.translation_delta_cost_weight = 1e-1  -- 1e-1
+TRAJECTORY_BUILDER_2D.real_time_correlative_scan_matcher.rotation_delta_cost_weight = 1e-1   --1e-1
+TRAJECTORY_BUILDER_2D.real_time_correlative_scan_matcher.angular_search_window = math.rad(30.) 
 
+--每过30秒，或者每前进两米，或者转75度 生成一幅submap ，及时消除累计误差，提高定位精度。
 TRAJECTORY_BUILDER_2D.motion_filter.max_time_seconds=30/TRAJECTORY_BUILDER_2D.submaps.num_range_data
 TRAJECTORY_BUILDER_2D.motion_filter.max_distance_meters=2/TRAJECTORY_BUILDER_2D.submaps.num_range_data
 TRAJECTORY_BUILDER_2D.motion_filter.max_angle_radians 

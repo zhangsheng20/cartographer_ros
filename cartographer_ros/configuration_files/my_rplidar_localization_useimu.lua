@@ -24,8 +24,8 @@ POSE_GRAPH.constraint_builder.min_score = 0.65--0.55
 POSE_GRAPH.constraint_builder.sampling_ratio=0.2
 POSE_GRAPH.constraint_builder.global_localization_min_score =0.5     --0.6
 
-POSE_GRAPH.constraint_builder.fast_correlative_scan_matcher.angular_search_window = math.rad(90.) --30
-POSE_GRAPH.constraint_builder.fast_correlative_scan_matcher.linear_search_window = 2.5    --7
+POSE_GRAPH.constraint_builder.fast_correlative_scan_matcher.angular_search_window = math.rad(90.) --30 这个角度需要大一点以增加初始化成功率
+POSE_GRAPH.constraint_builder.fast_correlative_scan_matcher.linear_search_window = 2.5    --7   减小防止跳变
 
 
 POSE_GRAPH.constraint_builder.loop_closure_rotation_weight = 1e5          --1e5
@@ -38,7 +38,7 @@ POSE_GRAPH.constraint_builder.ceres_scan_matcher.ceres_solver_options.num_thread
 
 
 POSE_GRAPH.global_sampling_ratio=0.002
-POSE_GRAPH.matcher_rotation_weight=5e-2 -- 5e2
+POSE_GRAPH.matcher_rotation_weight=5e-2 -- 5e2  
 POSE_GRAPH.optimization_problem.rotation_weight=3e5 --3e1
 POSE_GRAPH.optimization_problem.acceleration_weight=1e-3   --1e3
 
